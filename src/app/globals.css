@@ -1,0 +1,442 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --background: #0e0e0d;
+  --foreground: #ecebe6;
+  --muted: #8e8d87;
+  --line: #2a2a27;
+  --surface: #181816;
+  --accent: #c6f36b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-surface: var(--surface);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.15;
+  }
+}
+
+/* ad-style ticker on a project cover: two copies side by side, shifted by exactly one copy */
+@keyframes marquee-left {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+.marquee-left {
+  animation: marquee-left 18s linear infinite;
+}
+.marquee-right {
+  animation: marquee-right 26s linear infinite;
+}
+
+/* "what's next": the catalog screen scrolls itself, a pink glow breathes behind the phones */
+@keyframes catalog-scroll {
+  0%,
+  10% {
+    transform: translateY(0);
+  }
+  90%,
+  100% {
+    transform: translateY(var(--scroll-to));
+  }
+}
+.newproduct-scroll {
+  animation: catalog-scroll 16s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.group:hover .newproduct-scroll {
+  animation-play-state: paused;
+}
+
+@keyframes newproduct-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+.newproduct-glow {
+  background: radial-gradient(ellipse 55% 45% at 50% 40%, rgba(226, 52, 120, 0.35), transparent 70%);
+  animation: newproduct-breathe 6s ease-in-out infinite;
+}
+
+/* edge cases: items of the status card build themselves, the progress bar fills */
+@keyframes edge-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.edge-in {
+  animation: edge-in 500ms ease-out both;
+}
+@keyframes edge-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.edge-fill {
+  transform-origin: left;
+  animation: edge-fill 1100ms cubic-bezier(0.22, 1, 0.36, 1) 200ms both;
+}
+
+/* "what's next": the offline part of the bar breathes, hatched */
+@keyframes offline-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.nextsteps-offline {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 10px,
+    rgba(255, 255, 255, 0.05) 10px 20px
+  );
+}
+.nextsteps-offline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(140, 200, 255, 0.08);
+  animation: offline-breathe 3s ease-in-out infinite;
+}
+
+/* business impact: a soft light sweep across a tile as it appears */
+@keyframes user-sweep {
+  from {
+    transform: translateX(0) skewX(-18deg);
+  }
+  to {
+    transform: translateX(520%) skewX(-18deg);
+  }
+}
+.usersweep {
+  background: linear-gradient(to right, transparent, var(--sweep), transparent);
+  animation: user-sweep 1400ms ease-out 200ms both;
+}
+
+/* typing caret in the user quotes */
+.typing-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.12em;
+  background: var(--foreground);
+  animation: blink 0.9s steps(1) infinite;
+}
+
+/* the "problem" tag pops in with a short shake */
+@keyframes problem-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.04) translateX(0);
+  }
+  55% {
+    transform: translateX(-4px);
+  }
+  70% {
+    transform: translateX(4px);
+  }
+  85% {
+    transform: translateX(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+.problem-tag-in {
+  animation: problem-in 700ms ease-out 300ms both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero load-in: staggered via --d */
+.rise {
+  opacity: 0;
+  animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+
+/* Scroll reveal (see Reveal.tsx) */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Underline that draws in from the left on hover */
+/* visible keyboard focus: the accent color on the dark surfaces */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.link-line {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-line:hover {
+  background-size: 100% 1px;
+}
+
+/* Slowly drifting glow behind the first project's cover (ProjectCard) */
+.cover-glow {
+  overflow: hidden;
+}
+.cover-glow > span {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+.cover-glow-a {
+  left: -22%;
+  top: 22%;
+  width: 70%;
+  height: 80%;
+  background: radial-gradient(closest-side, rgba(86, 80, 226, 0.85), rgba(86, 80, 226, 0));
+  animation: glow-a 15s ease-in-out infinite alternate;
+}
+.cover-glow-b {
+  right: -22%;
+  top: 14%;
+  width: 70%;
+  height: 86%;
+  background: radial-gradient(closest-side, rgba(104, 96, 240, 0.8), rgba(104, 96, 240, 0));
+  animation: glow-b 18s ease-in-out infinite alternate;
+}
+.cover-glow-c {
+  left: 20%;
+  bottom: -38%;
+  width: 60%;
+  height: 70%;
+  background: radial-gradient(closest-side, rgba(150, 138, 255, 0.55), rgba(150, 138, 255, 0));
+  animation: glow-c 12s ease-in-out infinite alternate;
+}
+@keyframes glow-a {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(18%, -16%) scale(1.25);
+  }
+}
+@keyframes glow-b {
+  from {
+    transform: translate(0, 0) scale(1.15);
+  }
+  to {
+    transform: translate(-16%, 18%) scale(0.95);
+  }
+}
+@keyframes glow-c {
+  from {
+    transform: translate(0, 0) scale(0.9);
+    opacity: 0.6;
+  }
+  to {
+    transform: translate(30%, -10%) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Each card's glow keeps drifting while it is on stage (CardsShowcase) */
+.cards-glow {
+  animation: cards-drift 3.2s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes cards-drift {
+  from {
+    transform: translate(-5%, 4%) scale(1);
+  }
+  to {
+    transform: translate(5%, -4%) scale(1.12);
+  }
+}
+
+/* Flow diagram pieces draw in (FlowReveal) */
+.flow-tile {
+  animation-timing-function: cubic-bezier(0.45, 0, 0.2, 1);
+  animation-fill-mode: both;
+}
+@keyframes flow-x {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+@keyframes flow-y {
+  from {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+@keyframes flow-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Timeline slider (PayoutMorph) */
+.payout-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 20px;
+  background: transparent;
+  cursor: pointer;
+}
+.payout-range::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--foreground) var(--p), var(--line) var(--p));
+}
+.payout-range::-moz-range-track {
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--foreground) var(--p), var(--line) var(--p));
+}
+.payout-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -6.5px;
+  border-radius: 50%;
+  background: var(--foreground);
+  border: 0;
+}
+.payout-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--foreground);
+  border: 0;
+}
+.payout-range:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-tile,
+  .cards-glow,
+  .cover-glow > span,
+  .typing-caret,
+  .newproduct-scroll,
+  .newproduct-glow,
+  .marquee-left,
+  .marquee-right,
+  .usersweep,
+  .edge-in,
+  .edge-fill,
+  .nextsteps-offline::after,
+  .problem-tag-in {
+    animation: none !important;
+  }
+  .rise,
+  .reveal {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--background);
+}
