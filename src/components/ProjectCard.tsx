@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Project } from "@/lib/content";
+import { localeHref, type Locale } from "@/lib/i18n/config";
+import type { LocalizedProject } from "@/lib/localize";
 import StatusCover from "./StatusCover";
 
 /** Ad-style ticker over the empty top of a cover: one bold line sliding sideways. */
@@ -23,9 +24,17 @@ function Marquee({ text }: { text: string }) {
   );
 }
 
-export default function ProjectCard({ project, index }: { project: Project; index: number }) {
+export default function ProjectCard({
+  project,
+  index,
+  locale,
+}: {
+  project: LocalizedProject;
+  index: number;
+  locale: Locale;
+}) {
   return (
-    <Link href={`/work/${project.slug}`} className="group block">
+    <Link href={localeHref(locale, `/work/${project.slug}`)} className="group block">
       <div
         className="relative aspect-[4/3] overflow-hidden [container-type:inline-size]"
         style={{ backgroundColor: project.tone }}

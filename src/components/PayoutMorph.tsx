@@ -2,6 +2,7 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useI18n } from "@/lib/i18n/provider";
 
 type Shot = { image: StaticImageData; alt: string; caption: string };
 
@@ -17,6 +18,7 @@ const HOLD_MS = 2400; // how long the finished state stays on screen
  * takes over, "Auto-play" gives control back.
  */
 export default function PayoutMorph({ before, after }: { before: Shot; after: Shot }) {
+  const { dict } = useI18n();
   const rootRef = useRef<HTMLDivElement>(null);
   const [month, setMonth] = useState(0);
   const [auto, setAuto] = useState(true);
@@ -152,7 +154,7 @@ export default function PayoutMorph({ before, after }: { before: Shot; after: Sh
           <div className="mt-8">
             <div className="flex items-center justify-between font-mono text-xs uppercase tracking-wide">
               <span className="text-muted">
-                Month <span className="text-foreground tabular-nums">{shownMonth}</span> / {TOTAL_MONTHS}
+                {dict.payout.month} <span className="text-foreground tabular-nums">{shownMonth}</span> / {TOTAL_MONTHS}
               </span>
               <button
                 type="button"
@@ -160,7 +162,7 @@ export default function PayoutMorph({ before, after }: { before: Shot; after: Sh
                 aria-pressed={auto}
                 className="link-line pb-0.5"
               >
-                {auto ? "Pause" : "Auto-play"}
+                {auto ? dict.payout.pause : dict.payout.autoPlay}
               </button>
             </div>
 
@@ -171,7 +173,7 @@ export default function PayoutMorph({ before, after }: { before: Shot; after: Sh
                 max={TOTAL_MONTHS}
                 step={0.1}
                 value={month}
-                aria-label="Contract timeline in months"
+                aria-label={dict.payout.rangeAria}
                 onChange={(e) => {
                   setAuto(false);
                   setMonth(Number(e.target.value));
@@ -190,7 +192,7 @@ export default function PayoutMorph({ before, after }: { before: Shot; after: Sh
               className="mt-4 font-mono text-xs uppercase tracking-wide transition-colors duration-500"
               style={{ color: morphed ? "var(--accent)" : "var(--muted)" }}
             >
-              {morphed ? "Last month — the bar becomes the CTA" : "Contract in progress — bar fills up"}
+              {morphed ? dict.payout.morphed : dict.payout.idle}
             </p>
           </div>
         </div>

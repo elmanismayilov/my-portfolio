@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useI18n } from "@/lib/i18n/provider";
 
 const VIOLET = "#5d5dff";
 const ORANGE = "#f9a737";
@@ -13,26 +14,20 @@ type Dot = "done" | "alert" | "error" | "pending" | "paid";
 type Step = { dot: Dot; title: string; sub?: string; action?: string };
 
 type State = {
-  id: string;
-  tab: string; // English label
-  note: string; // English: what the user sees and why it matters
+  id: "locked" | "rejected" | "document" | "paid"; // the tab label and the note come from the dictionary (edge.states)
   body: { kind: "locked" } | { kind: "timeline"; steps: Step[] };
   button: { label: string; style: "primary" | "disabled" | "secondary" };
 };
 
-// Interface text is in Azerbaijani, like the real app; the English notes sit beside the screen.
+// Interface text is in Azerbaijani, like the real app; the notes beside the screen follow the page language.
 const STATES: State[] = [
   {
     id: "locked",
-    tab: "Contract not completed yet",
-    note: "The user opens the claim before the term ends. The button is disabled and the screen says when it unlocks — no dead end, no silent failure.",
     body: { kind: "locked" },
     button: { label: "Müraciət et", style: "disabled" },
   },
   {
     id: "rejected",
-    tab: "Request rejected",
-    note: "A rejection always shows the reason and a one-tap way to apply again with corrected data.",
     body: {
       kind: "timeline",
       steps: [
@@ -44,8 +39,6 @@ const STATES: State[] = [
   },
   {
     id: "document",
-    tab: "Document requested again",
-    note: "An unclear document pauses the request instead of cancelling it. The user is told exactly what to fix, and the timeline keeps its place.",
     body: {
       kind: "timeline",
       steps: [
@@ -64,8 +57,6 @@ const STATES: State[] = [
   },
   {
     id: "paid",
-    tab: "Payout made",
-    note: "The last step closes the loop: a clear confirmation with the amount, and the signed application stays downloadable.",
     body: {
       kind: "timeline",
       steps: [
@@ -216,6 +207,7 @@ function Phone({ state }: { state: State }) {
  * It cycles on its own once it is visible, until the viewer picks a tab.
  */
 export default function EdgeCases(): ReactNode {
+  const { dict } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const [seen, setSeen] = useState(false);
   const [i, setI] = useState(0);
@@ -249,7 +241,7 @@ export default function EdgeCases(): ReactNode {
   return (
     <div ref={ref} className="grid grid-cols-1 items-center gap-10 md:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] md:gap-14">
       <div>
-        <div role="tablist" aria-label="Request states" className="border-b border-line">
+        <div role="tablist" aria-label={dict.edge.tabsAria} className="border-b border-line">
           {STATES.map((s, k) => {
             const on = k === i;
             return (
@@ -272,7 +264,7 @@ export default function EdgeCases(): ReactNode {
                       on ? "text-foreground" : "text-muted group-hover:text-foreground"
                     }`}
                   >
-                    {s.tab}
+                    {dict.edge.states[s.id].tab}
                   </span>
                 </span>
                 <span
@@ -280,7 +272,7 @@ export default function EdgeCases(): ReactNode {
                   style={{ gridTemplateRows: on ? "1fr" : "0fr", opacity: on ? 1 : 0 }}
                 >
                   <span className="overflow-hidden">
-                    <span className="mt-3 block pl-9 text-base leading-relaxed text-muted md:text-lg">{s.note}</span>
+                    <span className="mt-3 block pl-9 text-base leading-relaxed text-muted md:text-lg">{dict.edge.states[s.id].note}</span>
                   </span>
                 </span>
               </button>

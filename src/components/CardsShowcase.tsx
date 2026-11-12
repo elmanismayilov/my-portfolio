@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useI18n } from "@/lib/i18n/provider";
 
 // Source artwork is 1920 x 1080; every card sits at its original place in it.
 const W = 1920;
@@ -49,6 +50,7 @@ const REST = 3200; // everything in place before the loop restarts
  * holds for one second, then flies to its place in the grid. Loops; every card is shown every time.
  */
 export default function CardsShowcase() {
+  const { dict } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   const [run, setRun] = useState(0);
@@ -102,7 +104,7 @@ export default function CardsShowcase() {
       <div
         ref={ref}
         role="img"
-        aria-label="Eight contract cards presented one by one, each in its own color, then arranged in a grid"
+        aria-label={dict.cards.aria}
         className="relative aspect-video w-full overflow-hidden bg-[#050507]"
       >
         {/* ambient glow, as in the original artwork */}

@@ -25,17 +25,27 @@ import BeforeAfter from "@/components/BeforeAfter";
 import NpsResults from "@/components/NpsResults";
 import Foundations from "@/components/Foundations";
 import CashmateDemo from "@/components/CashmateDemo";
-import { projects, site } from "@/lib/content";
+import { projects } from "@/lib/content";
+import { isLocale, localeHref, locales, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getProject, getSite } from "@/lib/localize";
 
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return locales.flatMap((lang) => projects.map((p) => ({ lang, slug: p.slug })));
 }
 
-export async function generateMetadata({ params }: PageProps<"/work/[slug]">): Promise<Metadata> {
-  const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+export async function generateMetadata({ params }: PageProps<"/[lang]/work/[slug]">): Promise<Metadata> {
+  const { lang, slug } = await params;
+  if (!isLocale(lang)) return {};
+  const project = getProject(lang, slug);
   if (!project) return {};
-  return { title: `${project.title} — ${site.name}`, description: project.description };
+  return {
+    title: `${project.title} — ${getSite(lang).name}`,
+    description: project.description,
+    alternates: {
+      languages: Object.fromEntries(locales.map((l) => [l, `/${l}/work/${slug}`])),
+    },
+  };
 }
 
 /** Renders **bold** segments inside a plain string. */
@@ -55,10 +65,10 @@ function RichText({ text }: { text: string }) {
   );
 }
 
-function BackLink({ className = "" }: { className?: string }) {
+function BackLink({ locale, className = "" }: { locale: Locale; className?: string }) {
   return (
     <Link
-      href="/#work"
+      href={localeHref(locale, "/#work")}
       className={`group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wide ${className}`}
     >
       <span
@@ -67,23 +77,25 @@ function BackLink({ className = "" }: { className?: string }) {
       >
         ←
       </span>
-      <span className="link-line pb-0.5">All work</span>
+      <span className="link-line pb-0.5">{getDictionary(locale).work.allWork}</span>
     </Link>
   );
 }
 
-export default async function ProjectPage({ params }: PageProps<"/work/[slug]">) {
-  const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+export default async function ProjectPage({ params }: PageProps<"/[lang]/work/[slug]">) {
+  const { lang, slug } = await params;
+  if (!isLocale(lang)) notFound();
+  const project = getProject(lang, slug);
   if (!project) notFound();
+  const dict = getDictionary(lang);
 
   const sections = project.sections ?? [];
 
   return (
     <>
-      <Header />
+      <Header locale={lang} />
       <main className="mx-auto w-full max-w-[1440px] px-5 pt-8 pb-20 md:px-10 md:pt-10 md:pb-28">
-        <BackLink />
+        <BackLink locale={lang} />
 
         <div className="rise mt-10 md:mt-14">
           <h1 className="max-w-[18ch] text-5xl leading-[0.95] font-black tracking-tighter uppercase sm:text-6xl md:text-7xl lg:text-8xl">
@@ -91,25 +103,25 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
           </h1>
           <dl className="mt-10 grid grid-cols-2 gap-4 border-t border-line pt-4 font-mono text-xs uppercase tracking-wide md:grid-cols-4">
             <div>
-              <dt className="text-muted">Category</dt>
+              <dt className="text-muted">{dict.work.category}</dt>
               <dd className="mt-1">{project.category}</dd>
             </div>
             <div>
-              <dt className="text-muted">Year</dt>
+              <dt className="text-muted">{dict.work.year}</dt>
               <dd className="mt-1">{project.year}</dd>
             </div>
           </dl>
         </div>
 
         {project.summary && (
-          <section className="mt-16 md:mt-24" aria-label="Project summary">
+          <section className="mt-16 md:mt-24" aria-label={dict.work.summaryAria}>
             <div className="grid grid-cols-12 gap-x-4 gap-y-10">
               <dl className="col-span-12 md:col-span-8 md:col-start-4">
                 {project.summary.facts.map((fact, i) => (
                   <Reveal
                     key={fact.label}
                     delay={i * 80}
-                    className="grid grid-cols-1 gap-2 border-t border-line py-6 md:grid-cols-8 md:gap-4"
+                    className="grid grid-cols-1 gap-2 border-t border-line py-6 md:grid-cols-8 md:items-baseline md:gap-4"
                   >
                     <dt className="font-mono text-xs uppercase tracking-wide text-muted md:col-span-2">
                       {fact.label}
@@ -120,9 +132,9 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
                   </Reveal>
                 ))}
                 {project.summary.results && (
-                  <Reveal className="grid grid-cols-1 gap-2 border-t border-line py-6 md:grid-cols-8 md:gap-4">
+                  <Reveal className="grid grid-cols-1 gap-2 border-t border-line py-6 md:grid-cols-8 md:items-baseline md:gap-4">
                     <dt className="font-mono text-xs uppercase tracking-wide text-muted md:col-span-2">
-                      Results
+                      {dict.work.results}
                     </dt>
                     <dd className="md:col-span-6">
                       <p className="text-lg leading-relaxed text-muted md:text-xl">
@@ -139,7 +151,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
 
         {sections.length === 0 && (
           <p className="mt-24 font-mono text-xs uppercase tracking-wide text-muted">
-            Case study coming soon.
+            {dict.work.comingSoon}
           </p>
         )}
 
@@ -159,7 +171,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
                   <Reveal
                     key={block.heading}
                     delay={j * 80}
-                    className="grid grid-cols-1 gap-2 border-t border-line py-6 md:grid-cols-8 md:gap-4"
+                    className="grid grid-cols-1 gap-2 border-t border-line py-6 md:grid-cols-8 md:items-baseline md:gap-4"
                   >
                     <h3 className="font-mono text-xs uppercase tracking-wide text-muted md:col-span-2">
                       {block.heading}
@@ -211,7 +223,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
                 <div className="col-span-12">
                   <UserQuotes quotes={section.quotes} />
                   <p className="mt-3 font-mono text-xs uppercase tracking-wide text-muted">
-                    Illustrative quotes — names are fictional.
+                    {dict.work.illustrativeQuotes}
                   </p>
                 </div>
               )}
@@ -348,7 +360,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
                           {item.caption}
                           {item.selected && (
                             <span className="rounded-full bg-foreground px-2.5 py-1 text-background">
-                              ✓ Selected
+                              {dict.work.selected}
                             </span>
                           )}
                         </p>
@@ -409,7 +421,7 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
 
               {section.glossary && (
                 <div className="col-span-12">
-                  <Glossary items={section.glossary} />
+                  <Glossary items={section.glossary} title={dict.glossary.title} />
                 </div>
               )}
             </div>
@@ -417,10 +429,10 @@ export default async function ProjectPage({ params }: PageProps<"/work/[slug]">)
         ))}
 
         <div className="mt-24 border-t border-line pt-6 md:mt-32">
-          <BackLink />
+          <BackLink locale={lang} />
         </div>
       </main>
-      <Footer />
+      <Footer locale={lang} />
     </>
   );
 }

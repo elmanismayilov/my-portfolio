@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { fill, useI18n } from "@/lib/i18n/provider";
 
 const COUNT_MS = 1600;
 const STAGGER_MS = 140;
 
 const ease = (p: number) => 1 - Math.pow(1 - p, 3);
-const fmt = (n: number) => n.toLocaleString("en-US");
 
 /**
  * Active users brought in from the other products. A big total counts up first, then the product
@@ -21,6 +21,7 @@ export default function UsersByProduct({
   asOf: string;
   totalLabel: string;
 }) {
+  const { dict, number: fmt } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const [t, setT] = useState(-1); // ms since the block came into view; -1 = not yet
   const sorted = [...results].sort((a, b) => b.users - a.users);
@@ -110,13 +111,13 @@ export default function UsersByProduct({
                 <p className="text-right text-lg leading-tight font-medium md:text-xl">{r.name}</p>
               </div>
               <p
-                aria-label={`${fmt(r.users)} active users`}
+                aria-label={fill(dict.users.ariaUsers, { n: fmt(r.users) })}
                 className="mt-10 text-6xl leading-none font-black tracking-tighter tabular-nums md:text-7xl"
               >
                 <span aria-hidden>{fmt(Math.round(r.users * p))}</span>
               </p>
               <p className={`mt-3 font-mono text-xs uppercase tracking-wide ${leader ? "opacity-70" : "text-muted"}`}>
-                active users
+                {dict.users.activeUsers}
               </p>
             </li>
           );

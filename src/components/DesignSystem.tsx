@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { fill, useI18n } from "@/lib/i18n/provider";
 
 /* ---------- data (mirrors the Figma variable collections) ---------- */
 
@@ -115,6 +116,7 @@ const FADE = "background-color 500ms ease, color 500ms ease, border-color 500ms 
 /* ---------- 1. primitives ---------- */
 
 function Primitives() {
+  const { dict } = useI18n();
   const [ref, seen] = useInView<HTMLDivElement>(0.2);
   const [active, setActive] = useState<{ ref: string; hex: string } | null>(null);
 
@@ -122,10 +124,10 @@ function Primitives() {
     <div ref={ref}>
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="font-mono text-xs uppercase tracking-wide text-muted">
-          01 · Primitives — 80 colors, 8 palettes × 10 steps
+          {dict.designSystem.primitives}
         </h3>
         <p className="min-h-4 font-mono text-xs uppercase tracking-wide tabular-nums" aria-live="polite">
-          {active ? `${active.ref} · ${active.hex}` : "Hover a swatch"}
+          {active ? `${active.ref} · ${active.hex}` : dict.designSystem.hover}
         </p>
       </div>
 
@@ -168,6 +170,7 @@ function Primitives() {
 /* ---------- 2. tokens ---------- */
 
 function Tokens() {
+  const { dict } = useI18n();
   const [ref, seen] = useInView<HTMLDivElement>(0.35);
   const [mode, setMode] = useState<"light" | "dark">("light");
   const touched = useRef(false);
@@ -199,9 +202,9 @@ function Tokens() {
     <div ref={ref}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h3 className="font-mono text-xs uppercase tracking-wide text-muted">
-          02 · Tokens — 24 semantic colors, each with Light and Dark values
+          {dict.designSystem.tokens}
         </h3>
-        <div role="radiogroup" aria-label="Theme" className="flex rounded-full border border-line p-1 font-mono text-xs uppercase tracking-wide">
+        <div role="radiogroup" aria-label={dict.designSystem.themeAria} className="flex rounded-full border border-line p-1 font-mono text-xs uppercase tracking-wide">
           {(["light", "dark"] as const).map((m) => (
             <button
               key={m}
@@ -213,7 +216,7 @@ function Tokens() {
                 mode === m ? "bg-foreground text-background" : "text-muted hover:text-foreground"
               }`}
             >
-              {m}
+              {dict.designSystem[m]}
             </button>
           ))}
         </div>
@@ -224,7 +227,7 @@ function Tokens() {
         <div
           className="rounded-3xl p-4 md:p-6"
           style={{ backgroundColor: t("Surface", "Main BG"), transition: FADE }}
-          aria-label={`Preview of the app in ${mode} theme`}
+          aria-label={fill(dict.designSystem.previewAria, { mode: dict.designSystem[mode] })}
         >
           <div
             className="rounded-2xl p-5"

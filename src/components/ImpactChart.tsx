@@ -1,13 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { fill, useI18n } from "@/lib/i18n/provider";
 
-// Q3 2025: share of payout requests that moved to the app, % per month
-const DATA = [
-  { month: "July", value: 12 },
-  { month: "August", value: 22 },
-  { month: "September", value: 30 },
-];
+// Q3 2025: share of payout requests that moved to the app, % per month (month names: dictionary impact.months)
+const VALUES = [12, 22, 30];
 const MAX = 35;
 const TICKS = [0, 10, 20, 30, 35];
 
@@ -50,6 +47,8 @@ function useCountUp(target: number, active: boolean, ms = 1100) {
  * Plays when scrolled into view; switching the tab replays it.
  */
 export default function ImpactChart() {
+  const { dict } = useI18n();
+  const DATA = VALUES.map((value, i) => ({ month: dict.impact.months[i], value }));
   const ref = useRef<HTMLDivElement>(null);
   const [seen, setSeen] = useState(false);
   const [tab, setTab] = useState<"trend" | "share">("trend");
@@ -94,33 +93,33 @@ export default function ImpactChart() {
       {/* header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h3 className="text-2xl font-medium tracking-tight md:text-3xl">Digital Claim Adoption</h3>
-          <p className="mt-1 text-sm text-muted">Channel migration, % of monthly payout requests (Q3 2025)</p>
+          <h3 className="text-2xl font-medium tracking-tight md:text-3xl">{dict.impact.title}</h3>
+          <p className="mt-1 text-sm text-muted">{dict.impact.sub}</p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full bg-background px-4 py-2 text-sm">
           <span aria-hidden className="h-2 w-2 rounded-full" style={{ background: GREEN }} />
-          Launch: July 2025
+          {dict.impact.launchBadge}
         </span>
       </div>
 
       {/* stats */}
       <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
         <div className="rounded-3xl bg-background p-5 md:p-6">
-          <p className="text-sm text-muted">Peak adoption rate</p>
+          <p className="text-sm text-muted">{dict.impact.peak}</p>
           <p className="mt-2 flex flex-wrap items-baseline gap-x-4">
             <span className="text-5xl font-medium tracking-tight tabular-nums md:text-6xl">{peak}%</span>
             <span className="text-sm tabular-nums" style={{ color: GREEN }}>
-              ↗ +{growth}% since July
+              {fill(dict.impact.sinceJuly, { n: growth })}
             </span>
           </p>
         </div>
         <div className="rounded-3xl bg-background p-5 md:p-6">
-          <p className="text-sm text-muted">Current share split</p>
+          <p className="text-sm text-muted">{dict.impact.split}</p>
           <p className="mt-2 flex flex-wrap items-baseline gap-x-4">
             <span className="text-5xl font-medium tracking-tight tabular-nums md:text-6xl">
               {app} / {offline}
             </span>
-            <span className="text-sm text-muted">App vs Offline</span>
+            <span className="text-sm text-muted">{dict.impact.appVsOffline}</span>
           </p>
         </div>
       </div>
@@ -128,12 +127,12 @@ export default function ImpactChart() {
       {/* chart card */}
       <div className="mt-3 rounded-3xl bg-background p-5 md:mt-4 md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <h4 className="text-xl font-medium tracking-tight md:text-2xl">Share of Monthly Requests in the App</h4>
+          <h4 className="text-xl font-medium tracking-tight md:text-2xl">{dict.impact.chartTitle}</h4>
           <div role="tablist" className="flex rounded-full bg-surface p-1 text-sm">
             {(
               [
-                ["trend", "Growth Trend"],
-                ["share", "Channel Share"],
+                ["trend", dict.impact.tabTrend],
+                ["share", dict.impact.tabShare],
               ] as const
             ).map(([id, label]) => (
               <button
@@ -156,7 +155,7 @@ export default function ImpactChart() {
             <svg
               viewBox={`0 0 ${W} ${H}`}
               role="img"
-              aria-label="Line chart: share of requests in the app grew from 12% in July to 22% in August and 30% in September"
+              aria-label={dict.impact.lineAria}
               className="h-auto w-full"
             >
               {/* grid */}
@@ -187,7 +186,7 @@ export default function ImpactChart() {
                 />
                 <rect x={xs[0] + 8} y={PLOT.top + 2} width="118" height="24" rx="12" fill={GREEN} fillOpacity="0.16" />
                 <text x={xs[0] + 20} y={PLOT.top + 18} fontSize="12" fontWeight="600" fill={GREEN}>
-                  Launch · Jul 2025
+                  {dict.impact.launchLabel}
                 </text>
               </g>
 
@@ -258,7 +257,7 @@ export default function ImpactChart() {
             </svg>
           ) : (
             <div className="flex flex-col items-center justify-center gap-8 py-4 md:flex-row md:gap-16">
-              <svg viewBox="0 0 200 200" role="img" aria-label="Donut chart: 30% of requests in the app, 70% offline" className="h-auto w-56 md:w-64">
+              <svg viewBox="0 0 200 200" role="img" aria-label={dict.impact.donutAria} className="h-auto w-56 md:w-64">
                 <g transform="rotate(-90 100 100)">
                   <circle cx="100" cy="100" r={R} fill="none" stroke="var(--line)" strokeWidth="18" />
                   <circle
@@ -280,19 +279,19 @@ export default function ImpactChart() {
                   {app}%
                 </text>
                 <text x="100" y="126" textAnchor="middle" fontSize="11" className="fill-muted">
-                  in the app
+                  {dict.impact.inApp}
                 </text>
               </svg>
               <ul className="space-y-4 text-lg">
                 <li className="flex items-center gap-3">
                   <span aria-hidden className="h-3 w-3 rounded-full" style={{ background: LINE }} />
                   <span className="tabular-nums">{app}%</span>
-                  <span className="text-muted">App (digital)</span>
+                  <span className="text-muted">{dict.impact.appDigital}</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <span aria-hidden className="h-3 w-3 rounded-full bg-line" />
                   <span className="tabular-nums">{offline}%</span>
-                  <span className="text-muted">Offline (call center)</span>
+                  <span className="text-muted">{dict.impact.offline}</span>
                 </li>
               </ul>
             </div>

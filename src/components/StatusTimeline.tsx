@@ -2,19 +2,11 @@
 
 import type { StaticImageData } from "next/image";
 import { forwardRef, useEffect, useRef, useState } from "react";
+import { useI18n } from "@/lib/i18n/provider";
 
 // Story told by the animation. Each stage starts at the given time (ms); then it holds and loops.
 const STAGES = [0, 500, 1300, 2500, 3000, 3900];
 const LOOP_MS = 5900;
-
-const NOTES = [
-  "Request submitted",
-  "Request accepted",
-  "Missing document — the user is notified instantly",
-  "Document sent, the alert is resolved",
-  "Payment is being prepared",
-  "Payment made",
-];
 
 // crop of the money illustration inside the source screenshot (px of the 750-wide image)
 const ART = { x: 235, y: 245, w: 280, h: 235, srcW: 750, srcH: 1828 };
@@ -34,6 +26,7 @@ export default function StatusTimeline({
   alt: string;
   caption?: string;
 }) {
+  const { dict } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const stage = useStatusStage(ref);
 
@@ -53,7 +46,7 @@ export default function StatusTimeline({
       <div className="mt-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-1 font-mono text-xs uppercase tracking-wide text-muted">
         {caption && <p>{caption}</p>}
         <p aria-live="off" className="text-foreground">
-          {String(stage + 1).padStart(2, "0")} / {String(STAGES.length).padStart(2, "0")} — {NOTES[stage]}
+          {String(stage + 1).padStart(2, "0")} / {String(STAGES.length).padStart(2, "0")} — {dict.status.notes[stage]}
         </p>
       </div>
     </div>

@@ -1,4 +1,6 @@
-import { site } from "@/lib/content";
+import type { Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getSite } from "@/lib/localize";
 import LocalClock from "./LocalClock";
 
 /** Same outline button as "Contact now" in the header: the text rolls up while a copy rises from below. */
@@ -35,14 +37,16 @@ function OutlineButton({
   );
 }
 
-export default function Hero() {
+export default function Hero({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
+  const site = getSite(locale);
   const [first, ...rest] = site.name.split(" ");
   const linkedin = site.socials.find((s) => s.label === "LinkedIn"); // same link as in the footer
 
   return (
     <section id="top" className="mx-auto w-full max-w-[1440px] px-6 pt-12 pb-6 md:px-8 md:pt-16 md:pb-8">
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-baseline-last lg:gap-8">
-        <h1 className="rise text-[17vw] leading-[0.85] font-black tracking-tighter uppercase sm:text-8xl lg:col-span-8 lg:text-9xl xl:text-[10rem]">
+        <h1 lang="en" className="rise text-[17vw] leading-[0.85] font-black tracking-tighter uppercase sm:text-8xl lg:col-span-8 lg:text-9xl xl:text-[10rem]">
           {first}
           <br />
           {rest.join(" ")}
@@ -50,21 +54,20 @@ export default function Hero() {
 
         <div className="rise lg:col-span-4 lg:justify-self-end" style={{ "--d": "250ms" } as React.CSSProperties}>
           <p className="max-w-sm text-xl leading-snug font-medium tracking-tight md:text-2xl">
-            Product designer for insurance &amp; fintech.
+            {dict.hero.tagline}
           </p>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted md:text-base">
-            Turning complex products into simple experiences. Currently at Pasha Life, open to
-            remote and international roles.
+            {dict.hero.intro}
           </p>
           <p className="mt-6 flex items-center gap-2 text-xs font-medium tracking-wide uppercase">
             <span className="h-2 w-2 animate-[blink_2s_ease-in-out_infinite] rounded-full bg-accent" />
-            Available for work
+            {dict.hero.available}
           </p>
           <LocalClock className="mt-2 block pl-4 font-mono text-xs tracking-wide text-muted uppercase" />
 
           <div className="mt-6 flex flex-wrap gap-3">
             <OutlineButton href="/cv.pdf" download="Elman-Ismayilov-CV.pdf">
-              Download CV
+              {dict.hero.downloadCv}
             </OutlineButton>
             {linkedin && (
               <OutlineButton href={linkedin.href} external>

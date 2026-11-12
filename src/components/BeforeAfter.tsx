@@ -2,6 +2,7 @@
 
 import type { StaticImageData } from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useI18n } from "@/lib/i18n/provider";
 
 type Rect = [x: number, y: number, w: number, h: number]; // crop in source pixels
 export type BAView = { image: StaticImageData; rect?: Rect; alt: string };
@@ -31,6 +32,7 @@ function Crop({ view }: { view: BAView }) {
 }
 
 function Row({ fix, index }: { fix: BAFix; index: number }) {
+  const { dict } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const [on, setOn] = useState(false);
 
@@ -69,7 +71,7 @@ function Row({ fix, index }: { fix: BAFix; index: number }) {
 
       <div className="mt-6 grid grid-cols-1 items-center gap-4 md:grid-cols-[minmax(0,1fr)_72px_minmax(0,1fr)] md:gap-6">
         <div style={rise(150)}>
-          <p className="mb-2 font-mono text-xs uppercase tracking-wide text-muted">Before</p>
+          <p className="mb-2 font-mono text-xs uppercase tracking-wide text-muted">{dict.beforeAfter.before}</p>
           <Crop view={fix.before} />
         </div>
 
@@ -96,7 +98,7 @@ function Row({ fix, index }: { fix: BAFix; index: number }) {
         </svg>
 
         <div style={rise(650)}>
-          <p className="mb-2 font-mono text-xs uppercase tracking-wide text-muted">After</p>
+          <p className="mb-2 font-mono text-xs uppercase tracking-wide text-muted">{dict.beforeAfter.after}</p>
           <Crop view={fix.after} />
         </div>
       </div>

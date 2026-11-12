@@ -1,21 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useI18n } from "@/lib/i18n/provider";
 
-/* ---------- ILLUSTRATIVE DATA — replace with the real numbers ---------- */
-const MONTHS = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+/* ---------- ILLUSTRATIVE DATA — replace with the real numbers (the words are in the dictionary: nps.*) ---------- */
 const NPS = [41, 40, 41, 44, 48, 51];
 const LAUNCH_INDEX = 3; // October 2025
-const TABLE = [
-  { metric: "NPS", before: "41", after: "51", delta: "+10 pts · ≈ +25%" },
-  { metric: "Response rate", before: "22%", after: "12%", delta: "fewer, but honest answers" },
-  { metric: "Low scores with a reason", before: "—", after: "38%", delta: "new field" },
-  { metric: "Low scores later called a mistake", before: "Common", after: "Rare", delta: "per CX calls" },
-];
-const EXAMPLE = {
-  reason: "“I don't fully know the product yet”",
-  text: "It topped the reasons behind low scores, so the team moved the video tutorial onto the dashboard for new customers instead of hiding it in the menu.",
-};
 /* ------------------------------------------------------------------- */
 
 const W = 640;
@@ -26,11 +16,13 @@ const MAX = 55;
 const LINE = "#8cc8ff";
 const GREEN = "#3ddc84";
 const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
-const xOf = (i: number) => PLOT.left + 32 + (i * (PLOT.right - PLOT.left - 64)) / (MONTHS.length - 1);
+const xOf = (i: number) => PLOT.left + 32 + (i * (PLOT.right - PLOT.left - 64)) / (NPS.length - 1);
 const yOf = (v: number) => PLOT.top + (1 - (v - MIN) / (MAX - MIN)) * (PLOT.bottom - PLOT.top);
 
 /** NPS by month with the launch marked, a before/after table and one decision made from the new "why" field. */
 export default function NpsResults() {
+  const { dict } = useI18n();
+  const { months: MONTHS, rows: TABLE } = dict.nps;
   const ref = useRef<HTMLDivElement>(null);
   const [on, setOn] = useState(false);
 
@@ -56,13 +48,13 @@ export default function NpsResults() {
     <div ref={ref} className="space-y-3 md:space-y-4">
       {/* chart */}
       <div className="rounded-3xl bg-surface p-5 md:p-8">
-        <h3 className="text-xl font-medium tracking-tight md:text-2xl">NPS by month</h3>
-        <p className="mt-1 text-sm text-muted">Jul – Dec 2025 · survey redesign launched in October</p>
+        <h3 className="text-xl font-medium tracking-tight md:text-2xl">{dict.nps.chartTitle}</h3>
+        <p className="mt-1 text-sm text-muted">{dict.nps.chartSub}</p>
 
         <svg
           viewBox={`0 0 ${W} ${H}`}
           role="img"
-          aria-label="Line chart of monthly NPS: 41, 40, 41 before the October launch, then 44, 48 and 51 after it"
+          aria-label={dict.nps.chartAria}
           className="mt-6 h-auto w-full"
         >
           {[30, 40, 50].map((t) => (
@@ -87,7 +79,7 @@ export default function NpsResults() {
             />
             <rect x={xOf(LAUNCH_INDEX) + 8} y={PLOT.top - 6} width="112" height="24" rx="12" fill={GREEN} fillOpacity="0.16" />
             <text x={xOf(LAUNCH_INDEX) + 20} y={PLOT.top + 10} fontSize="12" fontWeight="600" fill={GREEN}>
-              Launch · Oct 2025
+              {dict.nps.launch}
             </text>
           </g>
 
@@ -142,12 +134,12 @@ export default function NpsResults() {
 
       {/* before / after table */}
       <div className="rounded-3xl bg-surface p-5 md:p-8">
-        <h3 className="text-xl font-medium tracking-tight md:text-2xl">Before / after</h3>
+        <h3 className="text-xl font-medium tracking-tight md:text-2xl">{dict.nps.tableTitle}</h3>
         <div className="mt-4 grid grid-cols-[minmax(0,1.6fr)_minmax(0,0.7fr)_minmax(0,0.7fr)] gap-x-4 font-mono text-xs uppercase tracking-wide text-muted md:grid-cols-[minmax(0,2fr)_minmax(0,0.7fr)_minmax(0,0.7fr)_minmax(0,1.4fr)]">
-          <span>Metric</span>
-          <span>Before</span>
-          <span>After</span>
-          <span className="hidden md:block">Change</span>
+          <span>{dict.nps.metric}</span>
+          <span>{dict.nps.before}</span>
+          <span>{dict.nps.after}</span>
+          <span className="hidden md:block">{dict.nps.change}</span>
         </div>
         <ul>
           {TABLE.map((r, i) => (
@@ -178,13 +170,13 @@ export default function NpsResults() {
           transition: "opacity 700ms ease-out 2000ms",
         }}
       >
-        <p className="font-mono text-xs uppercase tracking-wide text-muted">A decision made from the new “why” field</p>
-        <p className="mt-4 text-2xl leading-snug font-medium tracking-tight md:text-3xl">{EXAMPLE.reason}</p>
-        <p className="mt-3 text-base leading-relaxed text-muted md:text-lg">{EXAMPLE.text}</p>
+        <p className="font-mono text-xs uppercase tracking-wide text-muted">{dict.nps.decisionLabel}</p>
+        <p className="mt-4 text-2xl leading-snug font-medium tracking-tight md:text-3xl">{dict.nps.reason}</p>
+        <p className="mt-3 text-base leading-relaxed text-muted md:text-lg">{dict.nps.reasonText}</p>
       </div>
 
       <p className="font-mono text-xs uppercase tracking-wide text-muted">
-        Illustrative data — shape of the result, not final figures.
+        {dict.nps.illustrative}
       </p>
     </div>
   );

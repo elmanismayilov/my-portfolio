@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useI18n } from "@/lib/i18n/provider";
 
 const LIME = "#d9ff66";
 const LILAC = "#cfb5fb";
@@ -22,6 +23,7 @@ const fmt = (n: number) => `${Math.round(n)},00₼`;
  * save, and watch the home screen update. Plays once when it scrolls into view; replay on demand.
  */
 export default function CashmateDemo() {
+  const { dict } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const [seen, setSeen] = useState(false);
   const [run, setRun] = useState(0); // bumps on every (re)play
@@ -122,7 +124,7 @@ export default function CashmateDemo() {
     <div ref={ref} className="grid grid-cols-1 items-center gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] md:gap-14">
       <div
         role="img"
-        aria-label="Scripted demo: the user types 100 on the keypad and saves the expense. On the home screen the balance drops from 650 to 550 and the expense total grows from 350 to 450."
+        aria-label={dict.cashmate.aria}
         className="mx-auto w-full max-w-[320px] rounded-[38px] p-2.5 shadow-2xl ring-1 ring-white/15"
         style={{ background: "#0a0a0a", opacity: seen ? 1 : 0, transition: "opacity 700ms ease-out" }}
       >
@@ -244,13 +246,12 @@ export default function CashmateDemo() {
       </div>
 
       <div>
-        <p className="font-mono text-xs uppercase tracking-wide text-muted">The core loop</p>
+        <p className="font-mono text-xs uppercase tracking-wide text-muted">{dict.cashmate.kicker}</p>
         <h3 className="mt-3 text-3xl leading-[1.1] font-medium tracking-tight md:text-4xl">
-          Type it like a calculator, see it everywhere.
+          {dict.cashmate.heading}
         </h3>
         <p className="mt-4 text-lg leading-relaxed text-muted md:text-xl">
-          Adding an expense takes one screen and a keypad. The moment it is saved, the balance, the expense total and
-          the account all move together.
+          {dict.cashmate.body}
         </p>
         <button
           type="button"
@@ -259,7 +260,7 @@ export default function CashmateDemo() {
           className="mt-8 inline-flex items-center gap-2 rounded-full border border-line px-5 py-2.5 font-mono text-xs uppercase tracking-wide transition-colors hover:border-foreground disabled:opacity-40"
           style={{ opacity: done ? 1 : 0.5 }}
         >
-          <span aria-hidden>↻</span> Replay
+          <span aria-hidden>↻</span> {dict.cashmate.replay}
         </button>
       </div>
     </div>

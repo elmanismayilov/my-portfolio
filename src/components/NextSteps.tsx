@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useI18n } from "@/lib/i18n/provider";
 
 const BLUE = "#8cc8ff";
 
@@ -15,6 +16,7 @@ export default function NextSteps({
   share: { app: number; offline: number };
   ideas: { title: string; text: string }[];
 }) {
+  const { dict } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const [on, setOn] = useState(false);
   const [n, setN] = useState(0);
@@ -55,10 +57,10 @@ export default function NextSteps({
       {/* split bar */}
       <div className="flex items-baseline justify-between font-mono text-xs uppercase tracking-wide">
         <span>
-          <span className="tabular-nums">{n}%</span> <span className="text-muted">in the app</span>
+          <span className="tabular-nums">{n}%</span> <span className="text-muted">{dict.nextSteps.inApp}</span>
         </span>
         <span>
-          <span className="tabular-nums">{share.offline}%</span> <span className="text-muted">still offline</span>
+          <span className="tabular-nums">{share.offline}%</span> <span className="text-muted">{dict.nextSteps.stillOffline}</span>
         </span>
       </div>
       <div className="relative mt-3 flex h-14 overflow-hidden rounded-2xl bg-surface md:h-16">
@@ -74,7 +76,7 @@ export default function NextSteps({
           className="nextsteps-offline relative flex flex-1 items-center justify-center px-4 text-center font-mono text-xs uppercase tracking-wide text-muted"
           style={{ opacity: on ? 1 : 0, transition: "opacity 800ms ease-out 1000ms" }}
         >
-          The opportunity
+          {dict.nextSteps.opportunity}
         </div>
       </div>
 
@@ -94,7 +96,7 @@ export default function NextSteps({
             <div className="flex items-center justify-between">
               <span className="font-mono text-xs tabular-nums text-muted">{String(i + 1).padStart(2, "0")}</span>
               <span className="rounded-full border border-line px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide text-muted">
-                Planned
+                {dict.nextSteps.planned}
               </span>
             </div>
             <h4 className="mt-6 text-xl font-medium tracking-tight md:text-2xl">{idea.title}</h4>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useI18n } from "@/lib/i18n/provider";
 
 export type Decision = {
   question: string;
@@ -19,6 +20,7 @@ export default function DecisionTable({ decisions }: { decisions: Decision[] }) 
 }
 
 function DecisionRow({ decision, index }: { decision: Decision; index: number }) {
+  const { dict } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const [seen, setSeen] = useState(false);
   const [picked, setPicked] = useState(false);
@@ -77,7 +79,7 @@ function DecisionRow({ decision, index }: { decision: Decision; index: number })
                       transition: "opacity 400ms ease-out 200ms, transform 500ms cubic-bezier(0.34,1.56,0.64,1) 200ms",
                     }}
                   >
-                    ✓ Chosen
+                    {dict.decision.chosen}
                   </span>
                 )}
               </div>

@@ -2,6 +2,7 @@
 
 import type { StaticImageData } from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useI18n } from "@/lib/i18n/provider";
 
 /** A piece of the image that appears on its own. Rect is in the image's own pixel space. */
 export type RevealTile = {
@@ -71,6 +72,7 @@ export default function FlowReveal({
   bg?: string;
   openFull?: boolean;
 }) {
+  const { dict } = useI18n();
   const list = tiles ?? FLOW_TILES;
   const k = tiles ? 1 : FLOW_SPEED;
 
@@ -173,11 +175,11 @@ export default function FlowReveal({
             }}
             className="link-line pb-0.5 text-foreground"
           >
-            Replay ↻
+            {dict.flow.replay}
           </button>
           {openFull && (
             <a href={image.src} target="_blank" rel="noreferrer" className="link-line pb-0.5 text-foreground">
-              Open full size ↗
+              {dict.flow.openFull}
             </a>
           )}
         </div>

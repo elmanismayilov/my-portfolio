@@ -46,8 +46,6 @@ export const site = {
   name: "Elman Ismayilov",
   role: "Product Designer",
   email: EMAIL,
-  // One link for every "Get in touch" button: the subject and the first line of the message are pre-filled
-  mailto: `mailto:${EMAIL}?subject=${encodeURIComponent("Product Designer opportunity")}&body=${encodeURIComponent("Hi Elman,")}`,
   linkedin: "https://www.linkedin.com/in/elmanismayilov/",
   telegram: "https://t.me/ElmanIsmayilov",
   location: "Baku, Azerbaijan",
@@ -60,10 +58,16 @@ export const site = {
   ],
 };
 
-export const nav = [
-  { label: "Work", href: "/#work" },
-  { label: "About", href: "/#about" },
-];
+/** One link for every "Get in touch" button: the subject and the first line of the message are pre-filled. */
+export function mailtoLink(subject: string, body: string) {
+  return `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+/** In-page links of the navbar; labels come from the dictionary (`nav.work`, `nav.about`). */
+export const navLinks = [
+  { key: "work", href: "/#work" },
+  { key: "about", href: "/#about" },
+] as const;
 
 /** One step of a case study: a labelled stage with its own copy and visual. */
 export type CaseSection = {
@@ -1429,16 +1433,5 @@ export const projects: Project[] = [
   },
 ];
 
-export const stats = [
-  { value: "35K+", label: "Users of the app" },
-  { value: "25%", label: "Boost in NPS metrics" },
-  { value: "8", label: "Years in design (2+ in product)" },
-];
-
-export const services = [
-  "Product Strategy",
-  "UX Research",
-  "Interaction Design",
-  "Design Systems",
-  "Prototyping",
-];
+/** Big numbers of the About section; the labels come from the dictionary (`about.stats`). */
+export const statValues = ["35K+", "25%", "8"] as const;

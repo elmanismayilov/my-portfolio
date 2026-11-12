@@ -7,7 +7,7 @@ export type UserQuote = {
   meta: string; // e.g. "34, Baku"
   product: string;
   quote: string; // original language
-  translation: string;
+  translation?: string; // omitted when the page language is the quote's own language
   problem: string; // short tag
 };
 
@@ -98,16 +98,18 @@ function QuoteCard({ q, delay }: { q: UserQuote; delay: number }) {
             <span aria-hidden>”</span>
           </span>
         </p>
-        <p
-          className="mt-4 text-base leading-relaxed text-muted"
-          style={{
-            opacity: done ? 1 : 0,
-            transform: done ? "none" : "translateY(6px)",
-            transition: "opacity 600ms ease-out 150ms, transform 600ms ease-out 150ms",
-          }}
-        >
-          {q.translation}
-        </p>
+        {q.translation && (
+          <p
+            className="mt-4 text-base leading-relaxed text-muted"
+            style={{
+              opacity: done ? 1 : 0,
+              transform: done ? "none" : "translateY(6px)",
+              transition: "opacity 600ms ease-out 150ms, transform 600ms ease-out 150ms",
+            }}
+          >
+            {q.translation}
+          </p>
+        )}
       </blockquote>
 
       <p

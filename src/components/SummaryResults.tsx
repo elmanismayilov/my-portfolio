@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { fill, useI18n } from "@/lib/i18n/provider";
 
 const COUNT_MS = 1400;
 const STAGGER_MS = 120;
@@ -10,6 +11,7 @@ const STAGGER_MS = 120;
  * and each number counts up.
  */
 export default function SummaryResults({ results }: { results: { name: string; users: number }[] }) {
+  const { dict, number } = useI18n();
   const ref = useRef<HTMLUListElement>(null);
   const [shown, setShown] = useState(false);
   const [p, setP] = useState(0); // count-up progress 0 → 1, eased
@@ -60,14 +62,14 @@ export default function SummaryResults({ results }: { results: { name: string; u
         >
           <span>{r.name}</span>
           <span
-            aria-label={`${r.users.toLocaleString("en-US")} active users`}
+            aria-label={fill(dict.users.ariaUsers, { n: number(r.users) })}
             className="font-mono text-sm uppercase tracking-wide text-muted"
           >
             <span aria-hidden>
               <span className="tabular-nums text-foreground">
-                {Math.round(r.users * p).toLocaleString("en-US")}
+                {number(Math.round(r.users * p))}
               </span>{" "}
-              active users
+              {dict.users.activeUsers}
             </span>
           </span>
           <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-line" />
