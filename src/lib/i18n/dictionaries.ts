@@ -45,21 +45,17 @@ export type Dictionary = {
   users: { activeUsers: string; ariaUsers: string }; // {n}
   edge: { tabsAria: string; states: Record<"locked" | "rejected" | "document" | "paid", { tab: string; note: string }> };
   nps: {
-    chartTitle: string;
-    chartSub: string;
-    chartAria: string;
-    months: [string, string, string, string, string, string];
-    launch: string;
+    heroLabel: string;
+    heroValue: string;
+    heroText: string;
     tableTitle: string;
     metric: string;
     before: string;
     after: string;
-    change: string;
-    rows: { metric: string; before: string; after: string; delta: string }[];
+    rows: { metric: string; before: string; after: string }[];
     decisionLabel: string;
     reason: string;
     reasonText: string;
-    illustrative: string;
   };
   impact: {
     title: string;
@@ -131,7 +127,7 @@ const en: Dictionary = {
     title: "About",
     portraitAlt: "Elman Ismayilov, Product Designer",
     lead: "Product designer at Pasha Life, the only designer on my product teams, owning design from research and flows to UI and design systems for an insurance app used by 35K+ people.",
-    body: "I turn complex processes into simple, measurable experiences: our NPS redesign lifted key metrics by 25%. Before moving into product in 2024, I spent 6 years in graphic design, so I care about both usability and craft. Open to remote and international roles.",
+    body: "I turn complex processes into simple, measurable experiences: our NPS redesign lifted key metrics by 20%. Before moving into product in 2024, I spent 6 years in graphic design, so I care about both usability and craft. Open to remote and international roles.",
     stats: ["Users of the app", "Boost in NPS metrics", "Years in design (2+ in product)"],
     services: ["Product Strategy", "UX Research", "Interaction Design", "Design Systems", "Prototyping"],
   },
@@ -185,27 +181,22 @@ const en: Dictionary = {
     },
   },
   nps: {
-    chartTitle: "NPS by month",
-    chartSub: "Jul – Dec 2025 · survey redesign launched in October",
-    chartAria: "Line chart of monthly NPS: 41, 40, 41 before the October launch, then 44, 48 and 51 after it",
-    months: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    launch: "Launch · Oct 2025",
+    heroLabel: "Growth in NPS metrics",
+    heroValue: "+20%",
+    heroText: "After the redesign, the key survey metrics grew by 20%.",
     tableTitle: "Before / after",
     metric: "Metric",
     before: "Before",
     after: "After",
-    change: "Change",
     rows: [
-      { metric: "NPS", before: "41", after: "51", delta: "+10 pts · ≈ +25%" },
-      { metric: "Response rate", before: "22%", after: "12%", delta: "fewer, but honest answers" },
-      { metric: "Low scores with a reason", before: "—", after: "38%", delta: "new field" },
-      { metric: "Low scores later called a mistake", before: "Common", after: "Rare", delta: "per CX calls" },
+      { metric: "Answers", before: "Many, some of them accidental", after: "Fewer, but honest" },
+      { metric: "Low scores with a reason", before: "Not collected", after: "New “why” field" },
+      { metric: "Low scores later called a mistake", before: "Common", after: "Rare" },
     ],
     decisionLabel: "A decision made from the new “why” field",
     reason: "“I don't fully know the product yet”",
     reasonText:
       "It topped the reasons behind low scores, so the team moved the video tutorial onto the dashboard for new customers instead of hiding it in the menu.",
-    illustrative: "Illustrative data — shape of the result, not final figures.",
   },
   impact: {
     title: "Digital Claim Adoption",
@@ -304,7 +295,7 @@ const ru: Dictionary = {
     title: "Обо мне",
     portraitAlt: "Elman Ismayilov, продуктовый дизайнер",
     lead: "Продуктовый дизайнер в Pasha Life; в моих продуктовых командах других дизайнеров нет, поэтому отвечаю за весь дизайн: от исследований и пользовательских сценариев до интерфейсов и дизайн-систем для страхового приложения, которым пользуются более 35 тысяч человек.",
-    body: "Превращаю сложные процессы в простой и измеримый опыт: после редизайна NPS-опроса ключевые метрики выросли на 25%. До перехода в продуктовый дизайн в 2024 году у меня было 6 лет опыта в графическом дизайне, поэтому для меня важны и удобство, и мастерство исполнения. Рассматриваю удалённые и международные предложения.",
+    body: "Превращаю сложные процессы в простой и измеримый опыт: после редизайна NPS-опроса ключевые метрики выросли на 20%. До перехода в продуктовый дизайн в 2024 году у меня было 6 лет опыта в графическом дизайне, поэтому для меня важны и удобство, и мастерство исполнения. Рассматриваю удалённые и международные предложения.",
     stats: ["Пользователей приложения", "Рост метрик NPS", "Лет в дизайне (2+ в продукте)"],
     services: [
       "Продуктовая стратегия",
@@ -364,33 +355,22 @@ const ru: Dictionary = {
     },
   },
   nps: {
-    chartTitle: "NPS по месяцам",
-    chartSub: "Июль – декабрь 2025 · редизайн опроса запущен в октябре",
-    chartAria:
-      "Линейный график NPS по месяцам: 41, 40 и 41 до запуска в октябре, затем 44, 48 и 51 после него",
-    months: ["Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
-    launch: "Запуск · окт 2025",
+    heroLabel: "Рост метрик NPS",
+    heroValue: "+20%",
+    heroText: "После редизайна ключевые показатели опроса выросли на 20%.",
     tableTitle: "До / после",
     metric: "Метрика",
     before: "До",
     after: "После",
-    change: "Изменение",
     rows: [
-      { metric: "NPS", before: "41", after: "51", delta: "+10 п. · ≈ +25%" },
-      { metric: "Доля ответов", before: "22%", after: "12%", delta: "ответов меньше, но они честные" },
-      { metric: "Низкие оценки с указанной причиной", before: "—", after: "38%", delta: "новое поле" },
-      {
-        metric: "Низкие оценки, которые потом назвали ошибкой",
-        before: "Часто",
-        after: "Редко",
-        delta: "по звонкам CX-команды",
-      },
+      { metric: "Ответы", before: "Много, часть из них случайные", after: "Меньше, но честные" },
+      { metric: "Низкие оценки с указанной причиной", before: "Причина не собиралась", after: "Новое поле «почему»" },
+      { metric: "Низкие оценки, которые потом назвали ошибкой", before: "Часто", after: "Редко" },
     ],
     decisionLabel: "Решение, принятое благодаря новому полю «почему»",
     reason: "«Я пока не до конца знаю продукт»",
     reasonText:
       "Эта причина возглавила список причин низких оценок, поэтому команда вынесла видеоинструкцию на главную панель для новых клиентов, вместо того чтобы прятать её в меню.",
-    illustrative: "Иллюстративные данные — характер результата, а не итоговые цифры.",
   },
   impact: {
     title: "Внедрение цифровых заявок",
@@ -500,7 +480,7 @@ const az: Dictionary = {
     title: "Haqqımda",
     portraitAlt: "Elman Ismayilov, məhsul dizayneri",
     lead: "Pasha Life-da məhsul dizayneriyəm, məhsul komandalarımda yeganə dizaynerəm: 35 mindən çox insanın istifadə etdiyi sığorta tətbiqi üçün tədqiqatdan və istifadəçi ssenarilərindən tutmuş interfeysə və dizayn sistemlərinə qədər bütün dizayna cavabdehəm.",
-    body: "Mürəkkəb prosesləri sadə və ölçülə bilən təcrübəyə çevirirəm: NPS sorğusunun yenidən dizaynı əsas göstəriciləri 25% artırdı. 2024-cü ildə məhsul dizaynına keçməzdən əvvəl 6 il qrafik dizaynda işləmişəm, ona görə həm istifadə rahatlığı, həm də peşəkar icra mənim üçün vacibdir. Uzaqdan və beynəlxalq vəzifələrə açığam.",
+    body: "Mürəkkəb prosesləri sadə və ölçülə bilən təcrübəyə çevirirəm: NPS sorğusunun yenidən dizaynı əsas göstəriciləri 20% artırdı. 2024-cü ildə məhsul dizaynına keçməzdən əvvəl 6 il qrafik dizaynda işləmişəm, ona görə həm istifadə rahatlığı, həm də peşəkar icra mənim üçün vacibdir. Uzaqdan və beynəlxalq vəzifələrə açığam.",
     stats: ["Tətbiq istifadəçiləri", "NPS göstəricilərində artım", "Dizaynda il (məhsulda 2+)"],
     services: [
       "Məhsul strategiyası",
@@ -560,33 +540,22 @@ const az: Dictionary = {
     },
   },
   nps: {
-    chartTitle: "Aylar üzrə NPS",
-    chartSub: "İyul – dekabr 2025 · sorğunun yenilənmiş dizaynı oktyabrda istifadəyə verilib",
-    chartAria:
-      "Aylıq NPS xətti qrafiki: oktyabrdakı buraxılışdan əvvəl 41, 40 və 41, ondan sonra isə 44, 48 və 51",
-    months: ["İyl", "Avq", "Sen", "Okt", "Noy", "Dek"],
-    launch: "Buraxılış · okt 2025",
+    heroLabel: "NPS göstəricilərində artım",
+    heroValue: "+20%",
+    heroText: "Yenidən dizayndan sonra sorğunun əsas göstəriciləri 20% artdı.",
     tableTitle: "Əvvəl / sonra",
     metric: "Göstərici",
     before: "Əvvəl",
     after: "Sonra",
-    change: "Dəyişiklik",
     rows: [
-      { metric: "NPS", before: "41", after: "51", delta: "+10 bal · ≈ +25%" },
-      { metric: "Cavab payı", before: "22%", after: "12%", delta: "cavablar azdır, amma səmimidir" },
-      { metric: "Səbəbi göstərilən aşağı qiymətlər", before: "—", after: "38%", delta: "yeni sahə" },
-      {
-        metric: "Sonradan səhv adlandırılan aşağı qiymətlər",
-        before: "Tez-tez",
-        after: "Nadir",
-        delta: "CX zənglərinə görə",
-      },
+      { metric: "Cavablar", before: "Çox, bəziləri təsadüfi", after: "Az, amma səmimi" },
+      { metric: "Səbəbi göstərilən aşağı qiymətlər", before: "Toplanmırdı", after: "Yeni “niyə” sahəsi" },
+      { metric: "Sonradan səhv adlandırılan aşağı qiymətlər", before: "Tez-tez", after: "Nadir" },
     ],
     decisionLabel: "Yeni “niyə” sahəsi əsasında qəbul edilmiş qərar",
     reason: "“Məhsulu hələ ki, tam tanımıram”",
     reasonText:
       "Bu səbəb aşağı qiymətlərin səbəbləri arasında birinci yerdə idi, ona görə də komanda video təlimatı menyuda gizlətmək əvəzinə yeni müştərilər üçün ana panelə çıxardı.",
-    illustrative: "Nümunəvi məlumatlar — nəticənin xarakterini göstərir, yekun rəqəmlər deyil.",
   },
   impact: {
     title: "Rəqəmsal müraciətlərin mənimsənilməsi",

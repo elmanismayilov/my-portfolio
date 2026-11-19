@@ -434,7 +434,7 @@ const az: Translation = {
     "nps-redesign": {
       title: "NPS sorğusunun yenidən dizaynı",
       category: "Veb platforma · Sığorta",
-      description: "Təsadüfi aşağı qiymətlərin aradan qaldırılması — göstəricilərdə 25% artım.",
+      description: "Təsadüfi aşağı qiymətlərin aradan qaldırılması — göstəricilərdə 20% artım.",
       summary: {
         facts: [
           ["Rolum", "Məhsul dizayneri — problemin təhlili, istifadəçi axını və UI mənim üzərimdə idi"],
@@ -442,7 +442,7 @@ const az: Translation = {
           ["Müddət", "2 sprint"],
           ["Platforma", "Veb platforma (müştəri kabineti)"],
           ["Buraxılış", "Oktyabr 2025"],
-          ["Nəticə", "NPS göstəricilərində **+25%** artım və nəhayət aşağı qiymətləri izah edən sorğu"],
+          ["Nəticə", "NPS göstəricilərində **+20%** artım və nəhayət aşağı qiymətləri izah edən sorğu"],
         ],
       },
       sections: [

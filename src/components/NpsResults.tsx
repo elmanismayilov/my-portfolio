@@ -3,26 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n/provider";
 
-/* ---------- ILLUSTRATIVE DATA — replace with the real numbers (the words are in the dictionary: nps.*) ---------- */
-const NPS = [41, 40, 41, 44, 48, 51];
-const LAUNCH_INDEX = 3; // October 2025
-/* ------------------------------------------------------------------- */
-
-const W = 640;
-const H = 280;
-const PLOT = { left: 56, right: 616, top: 24, bottom: 244 };
-const MIN = 30;
-const MAX = 55;
-const LINE = "#8cc8ff";
-const GREEN = "#3ddc84";
-const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
-const xOf = (i: number) => PLOT.left + 32 + (i * (PLOT.right - PLOT.left - 64)) / (NPS.length - 1);
-const yOf = (v: number) => PLOT.top + (1 - (v - MIN) / (MAX - MIN)) * (PLOT.bottom - PLOT.top);
-
-/** NPS by month with the launch marked, a before/after table and one decision made from the new "why" field. */
+/** NPS result without exact scores: one headline (+20%), a qualitative before/after table and one decision made from the new "why" field. */
 export default function NpsResults() {
   const { dict } = useI18n();
-  const { months: MONTHS, rows: TABLE } = dict.nps;
+  const { rows } = dict.nps;
   const ref = useRef<HTMLDivElement>(null);
   const [on, setOn] = useState(false);
 
@@ -42,121 +26,50 @@ export default function NpsResults() {
     return () => io.disconnect();
   }, []);
 
-  const line = NPS.map((v, i) => `${i ? "L" : "M"}${xOf(i)} ${yOf(v)}`).join(" ");
+  const grid = "grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)]";
 
   return (
     <div ref={ref} className="space-y-3 md:space-y-4">
-      {/* chart */}
+      {/* headline */}
       <div className="rounded-3xl bg-surface p-5 md:p-8">
-        <h3 className="text-xl font-medium tracking-tight md:text-2xl">{dict.nps.chartTitle}</h3>
-        <p className="mt-1 text-sm text-muted">{dict.nps.chartSub}</p>
-
-        <svg
-          viewBox={`0 0 ${W} ${H}`}
-          role="img"
-          aria-label={dict.nps.chartAria}
-          className="mt-6 h-auto w-full"
+        <p className="font-mono text-xs uppercase tracking-wide text-muted">{dict.nps.heroLabel}</p>
+        <p
+          className="mt-3 text-[22vw] leading-none font-semibold tracking-[-0.05em] md:text-[12vw] 2xl:text-[180px]"
+          style={{
+            color: "#3ddc84",
+            opacity: on ? 1 : 0,
+            transform: on ? "none" : "translateY(16px)",
+            transition: "opacity 700ms ease-out, transform 800ms cubic-bezier(0.22,1,0.36,1)",
+          }}
         >
-          {[30, 40, 50].map((t) => (
-            <g key={t}>
-              <line x1={PLOT.left} x2={PLOT.right} y1={yOf(t)} y2={yOf(t)} stroke="var(--line)" />
-              <text x={PLOT.left - 12} y={yOf(t) + 4} textAnchor="end" fontSize="12" className="fill-muted font-mono">
-                {t}
-              </text>
-            </g>
-          ))}
-
-          {/* launch marker */}
-          <g style={{ opacity: on ? 1 : 0, transition: "opacity 0.6s ease 0.2s" }}>
-            <line
-              x1={xOf(LAUNCH_INDEX)}
-              x2={xOf(LAUNCH_INDEX)}
-              y1={PLOT.top - 8}
-              y2={PLOT.bottom}
-              stroke={GREEN}
-              strokeWidth="2"
-              strokeDasharray="5 5"
-            />
-            <rect x={xOf(LAUNCH_INDEX) + 8} y={PLOT.top - 6} width="112" height="24" rx="12" fill={GREEN} fillOpacity="0.16" />
-            <text x={xOf(LAUNCH_INDEX) + 20} y={PLOT.top + 10} fontSize="12" fontWeight="600" fill={GREEN}>
-              {dict.nps.launch}
-            </text>
-          </g>
-
-          <path
-            d={line}
-            fill="none"
-            stroke={LINE}
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            pathLength={1}
-            strokeDasharray="1"
-            style={{ strokeDashoffset: on ? 0 : 1, transition: `stroke-dashoffset 1.6s ${EASE} 0.2s` }}
-          />
-          {NPS.map((v, i) => {
-            const delay = 0.2 + (i / (NPS.length - 1)) * 1.4;
-            return (
-              <g key={MONTHS[i]}>
-                <circle
-                  cx={xOf(i)}
-                  cy={yOf(v)}
-                  r="7"
-                  fill="var(--background)"
-                  stroke={LINE}
-                  strokeWidth="3.5"
-                  style={{
-                    transformBox: "fill-box",
-                    transformOrigin: "center",
-                    transform: on ? "scale(1)" : "scale(0)",
-                    transition: `transform 0.5s ${EASE} ${delay}s`,
-                  }}
-                />
-                <text
-                  x={xOf(i)}
-                  y={yOf(v) - 16}
-                  textAnchor="middle"
-                  fontSize="14"
-                  fontWeight="600"
-                  className="fill-foreground"
-                  style={{ opacity: on ? 1 : 0, transition: `opacity 0.4s ease ${delay + 0.2}s` }}
-                >
-                  {v}
-                </text>
-                <text x={xOf(i)} y={H - 10} textAnchor="middle" fontSize="13" className="fill-muted font-mono">
-                  {MONTHS[i]}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
+          {dict.nps.heroValue}
+        </p>
+        <p className="mt-4 max-w-xl text-base leading-relaxed text-muted md:text-lg">{dict.nps.heroText}</p>
       </div>
 
-      {/* before / after table */}
+      {/* before / after, in words */}
       <div className="rounded-3xl bg-surface p-5 md:p-8">
         <h3 className="text-xl font-medium tracking-tight md:text-2xl">{dict.nps.tableTitle}</h3>
-        <div className="mt-4 grid grid-cols-[minmax(0,1.6fr)_minmax(0,0.7fr)_minmax(0,0.7fr)] gap-x-4 font-mono text-xs uppercase tracking-wide text-muted md:grid-cols-[minmax(0,2fr)_minmax(0,0.7fr)_minmax(0,0.7fr)_minmax(0,1.4fr)]">
+        <div className={`mt-4 grid ${grid} gap-x-4 font-mono text-xs uppercase tracking-wide text-muted`}>
           <span>{dict.nps.metric}</span>
           <span>{dict.nps.before}</span>
           <span>{dict.nps.after}</span>
-          <span className="hidden md:block">{dict.nps.change}</span>
         </div>
         <ul>
-          {TABLE.map((r, i) => (
+          {rows.map((r, i) => (
             <li
               key={r.metric}
-              className="mt-3 grid grid-cols-[minmax(0,1.6fr)_minmax(0,0.7fr)_minmax(0,0.7fr)] items-baseline gap-x-4 border-t border-line pt-3 md:grid-cols-[minmax(0,2fr)_minmax(0,0.7fr)_minmax(0,0.7fr)_minmax(0,1.4fr)]"
+              className={`mt-3 grid ${grid} items-baseline gap-x-4 border-t border-line pt-3`}
               style={{
                 opacity: on ? 1 : 0,
                 transform: on ? "none" : "translateY(14px)",
                 transition: "opacity 600ms ease-out, transform 700ms cubic-bezier(0.22,1,0.36,1)",
-                transitionDelay: `${1400 + i * 140}ms`,
+                transitionDelay: `${400 + i * 140}ms`,
               }}
             >
               <span className="text-base md:text-lg">{r.metric}</span>
-              <span className="text-lg text-muted tabular-nums md:text-xl">{r.before}</span>
-              <span className="text-lg font-semibold tabular-nums md:text-xl">{r.after}</span>
-              <span className="col-span-3 mt-1 text-sm text-muted md:col-span-1 md:mt-0">{r.delta}</span>
+              <span className="text-base text-muted md:text-lg">{r.before}</span>
+              <span className="text-base font-semibold md:text-lg">{r.after}</span>
             </li>
           ))}
         </ul>
@@ -165,19 +78,12 @@ export default function NpsResults() {
       {/* one decision made from the data */}
       <div
         className="rounded-3xl border border-line p-5 md:p-8"
-        style={{
-          opacity: on ? 1 : 0,
-          transition: "opacity 700ms ease-out 2000ms",
-        }}
+        style={{ opacity: on ? 1 : 0, transition: "opacity 700ms ease-out 900ms" }}
       >
         <p className="font-mono text-xs uppercase tracking-wide text-muted">{dict.nps.decisionLabel}</p>
         <p className="mt-4 text-2xl leading-snug font-medium tracking-tight md:text-3xl">{dict.nps.reason}</p>
         <p className="mt-3 text-base leading-relaxed text-muted md:text-lg">{dict.nps.reasonText}</p>
       </div>
-
-      <p className="font-mono text-xs uppercase tracking-wide text-muted">
-        {dict.nps.illustrative}
-      </p>
     </div>
   );
 }

@@ -783,7 +783,7 @@ export const projects: Project[] = [
     title: "NPS Survey Redesign",
     category: "Web Platform · Insurance",
     year: "2025",
-    description: "Fixing accidental low scores — a 25% boost in metrics.",
+    description: "Fixing accidental low scores — a 20% boost in metrics.",
     tone: "#eceaf6",
     image: npsCover,
     summary: {
@@ -793,7 +793,7 @@ export const projects: Project[] = [
         { label: "Timeline", value: "2 sprints" },
         { label: "Platform", value: "Web platform (customer cabinet)" },
         { label: "Launch", value: "October 2025" },
-        { label: "Result", value: "**+25%** boost in NPS metrics, and a survey that finally explains low scores" },
+        { label: "Result", value: "**+20%** boost in NPS metrics, and a survey that finally explains low scores" },
       ],
     },
     sections: [
@@ -1434,4 +1434,4 @@ export const projects: Project[] = [
 ];
 
 /** Big numbers of the About section; the labels come from the dictionary (`about.stats`). */
-export const statValues = ["35K+", "25%", "8"] as const;
+export const statValues = ["35K+", "20%", "8"] as const;
