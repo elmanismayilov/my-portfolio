@@ -42,7 +42,7 @@ export type Dictionary = {
     illustrativeQuotes: string;
   };
   glossary: { title: string };
-  users: { activeUsers: string; ariaUsers: string }; // {n}
+  users: { activeUsers: string; ariaUsers: string; shareOfUsers: string }; // {n}
   edge: { tabsAria: string; states: Record<"locked" | "rejected" | "document" | "paid", { tab: string; note: string }> };
   nps: {
     heroLabel: string;
@@ -158,7 +158,7 @@ const en: Dictionary = {
     illustrativeQuotes: "Illustrative quotes — names are fictional.",
   },
   glossary: { title: "Interface text · Azerbaijani → English" },
-  users: { activeUsers: "active users", ariaUsers: "{n} active users" },
+  users: { activeUsers: "active users", ariaUsers: "{n} active users", shareOfUsers: "of active users" },
   edge: {
     tabsAria: "Request states",
     states: {
@@ -200,8 +200,8 @@ const en: Dictionary = {
   },
   impact: {
     title: "Digital Claim Adoption",
-    sub: "Channel migration, % of monthly payout requests (Q3 2025)",
-    launchBadge: "Launch: July 2025",
+    sub: "Channel migration, % of monthly payout requests (Q3 2026)",
+    launchBadge: "Launch: July 2026",
     peak: "Peak adoption rate",
     sinceJuly: "↗ +{n}% since July",
     split: "Current share split",
@@ -211,7 +211,7 @@ const en: Dictionary = {
     tabShare: "Channel Share",
     lineAria: "Line chart: share of requests in the app grew from 12% in July to 22% in August and 30% in September",
     months: ["July", "August", "September"],
-    launchLabel: "Launch · Jul 2025",
+    launchLabel: "Launch · Jul 2026",
     donutAria: "Donut chart: 30% of requests in the app, 70% offline",
     inApp: "in the app",
     appDigital: "App (digital)",
@@ -332,7 +332,7 @@ const ru: Dictionary = {
     illustrativeQuotes: "Иллюстративные цитаты — имена вымышлены.",
   },
   glossary: { title: "Тексты интерфейса · азербайджанский → русский" },
-  users: { activeUsers: "активных пользователей", ariaUsers: "{n} активных пользователей" },
+  users: { activeUsers: "активных пользователей", ariaUsers: "{n} активных пользователей", shareOfUsers: "от активных пользователей" },
   edge: {
     tabsAria: "Состояния заявки",
     states: {
@@ -374,8 +374,8 @@ const ru: Dictionary = {
   },
   impact: {
     title: "Внедрение цифровых заявок",
-    sub: "Переход между каналами, % ежемесячных заявок на выплату (3-й кв. 2025)",
-    launchBadge: "Запуск: июль 2025",
+    sub: "Переход между каналами, % ежемесячных заявок на выплату (3-й кв. 2026)",
+    launchBadge: "Запуск: июль 2026",
     peak: "Пиковая доля внедрения",
     sinceJuly: "↗ +{n}% с июля",
     split: "Текущее распределение",
@@ -386,7 +386,7 @@ const ru: Dictionary = {
     lineAria:
       "Линейный график: доля заявок в приложении выросла с 12% в июле до 22% в августе и 30% в сентябре",
     months: ["Июль", "Август", "Сентябрь"],
-    launchLabel: "Запуск · июль 2025",
+    launchLabel: "Запуск · июль 2026",
     donutAria: "Кольцевая диаграмма: 30% заявок в приложении, 70% офлайн",
     inApp: "в приложении",
     appDigital: "Приложение (цифровой канал)",
@@ -517,7 +517,7 @@ const az: Dictionary = {
     illustrativeQuotes: "Nümunəvi sitatlar — adlar uydurmadır.",
   },
   glossary: { title: "" },
-  users: { activeUsers: "aktiv istifadəçi", ariaUsers: "{n} aktiv istifadəçi" },
+  users: { activeUsers: "aktiv istifadəçi", ariaUsers: "{n} aktiv istifadəçi", shareOfUsers: "aktiv istifadəçilərin payı" },
   edge: {
     tabsAria: "Müraciətin vəziyyətləri",
     states: {
@@ -559,8 +559,8 @@ const az: Dictionary = {
   },
   impact: {
     title: "Rəqəmsal müraciətlərin mənimsənilməsi",
-    sub: "Kanallar üzrə keçid, aylıq ödəniş müraciətlərinin %-i (2025, III rüb)",
-    launchBadge: "Buraxılış: iyul 2025",
+    sub: "Kanallar üzrə keçid, aylıq ödəniş müraciətlərinin %-i (2026, III rüb)",
+    launchBadge: "Buraxılış: iyul 2026",
     peak: "Maksimum mənimsənmə səviyyəsi",
     sinceJuly: "↗ iyuldan bəri +{n}%",
     split: "Hazırkı bölgü",
@@ -571,7 +571,7 @@ const az: Dictionary = {
     lineAria:
       "Xətti qrafik: müraciətlərin tətbiqdəki payı iyulda 12%-dən avqustda 22%-ə, sentyabrda isə 30%-ə yüksəlib",
     months: ["İyul", "Avqust", "Sentyabr"],
-    launchLabel: "Buraxılış · iyul 2025",
+    launchLabel: "Buraxılış · iyul 2026",
     donutAria: "Dairəvi diaqram: müraciətlərin 30%-i tətbiqdə, 70%-i oflayn",
     inApp: "tətbiqdə",
     appDigital: "Tətbiq (rəqəmsal)",

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { fill, useI18n } from "@/lib/i18n/provider";
 
-// Q3 2025: share of payout requests that moved to the app, % per month (month names: dictionary impact.months)
+// Q3 2026: share of payout requests that moved to the app, % per month (month names: dictionary impact.months)
 const VALUES = [12, 22, 30];
 const MAX = 35;
 const TICKS = [0, 10, 20, 30, 35];

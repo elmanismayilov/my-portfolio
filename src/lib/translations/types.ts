@@ -20,7 +20,7 @@ export type SectionText = {
   decisions?: { question: string; options: { name: string; note: string }[] }[];
   beforeAfter?: { title: string; note: string; beforeAlt: string; afterAlt: string }[];
   nextSteps?: { ideas: { title: string; text: string }[] };
-  usersByProduct?: { totalLabel: string; asOf: string };
+  usersByProduct?: { asOf: string };
   newProduct?: { homeAlt: string; homeCaption: string; catalogAlt: string; catalogCaption: string };
   payoutMorph?: { before: Visual; after: Visual };
   statusTimeline?: Visual;

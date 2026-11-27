@@ -255,7 +255,6 @@ const az: Translation = {
             ],
           ],
           usersByProduct: {
-            totalLabel: "digər məhsullarımızın aktiv istifadəçisi",
             asOf: "Məlumatlar 6 noyabr 2026-cı il tarixinə",
           },
         },
@@ -272,7 +271,7 @@ const az: Translation = {
           ["Komanda", "Product Owner, biznes analitik, 2 frontend developer, backend developer"],
           ["Müddət", "1 sprint"],
           ["Platforma", "Mobil tətbiq"],
-          ["Buraxılış", "İyul 2025"],
+          ["Buraxılış", "İyul 2026"],
           ["Nəticə", "Aylıq ödəniş müraciətlərinin **30%-i** indi mobil tətbiq vasitəsilə daxil olur"],
         ],
       },
@@ -378,7 +377,7 @@ const az: Translation = {
           blocks: [
             [
               "Mənimsənilmə",
-              "2025-ci ilin iyulundakı buraxılışdan sonra 3 ay ərzində tətbiqin **aylıq** ödəniş müraciətlərindəki payı **12%**-dən **30%**-ə yüksəldi.",
+              "2026-ci ilin iyulundakı buraxılışdan sonra 3 ay ərzində tətbiqin **aylıq** ödəniş müraciətlərindəki payı **12%**-dən **30%**-ə yüksəldi.",
             ],
             [
               "Marketinq",

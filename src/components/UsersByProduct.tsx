@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { fill, useI18n } from "@/lib/i18n/provider";
+import { intlTag } from "@/lib/i18n/config";
+import { useI18n } from "@/lib/i18n/provider";
 
 const COUNT_MS = 1600;
 const STAGGER_MS = 140;
@@ -9,24 +10,28 @@ const STAGGER_MS = 140;
 const ease = (p: number) => 1 - Math.pow(1 - p, 3);
 
 /**
- * Active users brought in from the other products. A big total counts up first, then the product
- * tiles rise one after another, each with its own count-up. The biggest product is inverted.
+ * Active users brought in from the other products, as each product's share of their total. The
+ * product tiles rise one after another, each with its own count-up. The biggest product is inverted.
  */
 export default function UsersByProduct({
   results,
   asOf,
-  totalLabel,
 }: {
   results: { name: string; users: number }[];
   asOf: string;
-  totalLabel: string;
 }) {
-  const { dict, number: fmt } = useI18n();
+  const { locale, dict } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const [t, setT] = useState(-1); // ms since the block came into view; -1 = not yet
   const sorted = [...results].sort((a, b) => b.users - a.users);
   const total = sorted.reduce((s, r) => s + r.users, 0);
-  const end = COUNT_MS + STAGGER_MS * sorted.length + 800;
+  const end = COUNT_MS + STAGGER_MS * sorted.length + 300;
+  const percent = (share: number) =>
+    share.toLocaleString(intlTag[locale], {
+      style: "percent",
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    });
 
   useEffect(() => {
     const el = ref.current;
@@ -59,28 +64,17 @@ export default function UsersByProduct({
   }, [end]);
 
   const started = t >= 0;
-  const totalP = ease(Math.min(Math.max(t, 0) / COUNT_MS, 1));
 
   return (
     <div ref={ref}>
-      {/* total */}
-      <div className="border-t border-line pt-10">
-        <p
-          aria-label={`${fmt(total)} ${totalLabel}`}
-          className="text-7xl leading-none font-black tracking-tighter tabular-nums sm:text-8xl md:text-9xl"
-        >
-          <span aria-hidden>{fmt(Math.round(total * totalP))}</span>
-        </p>
-        <p className="mt-4 font-mono text-xs uppercase tracking-wide text-muted">{totalLabel}</p>
-      </div>
-
       {/* per product */}
-      <ul className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {sorted.map((r, i) => {
-          const tileStart = 500 + i * STAGGER_MS;
+          const tileStart = i * STAGGER_MS;
           const shown = t >= tileStart;
           const p = ease(Math.min(Math.max(t - tileStart, 0) / COUNT_MS, 1));
           const leader = i === 0;
+          const share = r.users / total;
           return (
             <li
               key={r.name}
@@ -111,13 +105,13 @@ export default function UsersByProduct({
                 <p className="text-right text-lg leading-tight font-medium md:text-xl">{r.name}</p>
               </div>
               <p
-                aria-label={fill(dict.users.ariaUsers, { n: fmt(r.users) })}
+                aria-label={`${percent(share)} ${dict.users.shareOfUsers}`}
                 className="mt-10 text-6xl leading-none font-black tracking-tighter tabular-nums md:text-7xl"
               >
-                <span aria-hidden>{fmt(Math.round(r.users * p))}</span>
+                <span aria-hidden>{percent(share * p)}</span>
               </p>
               <p className={`mt-3 font-mono text-xs uppercase tracking-wide ${leader ? "opacity-70" : "text-muted"}`}>
-                {dict.users.activeUsers}
+                {dict.users.shareOfUsers}
               </p>
             </li>
           );

@@ -114,8 +114,8 @@ export type CaseSection = {
   nextSteps?: { share: { app: number; offline: number }; ideas: { title: string; text: string }[] };
   // translation of key interface texts (Azerbaijani → English), shown under the section's visuals
   glossary?: { az: string; en: string }[];
-  // big total + a tile per product with count-ups; rows come from the project's `summary.results`
-  usersByProduct?: { totalLabel: string; asOf: string };
+  // a tile per product with its share of users, counting up; rows come from the project's `summary.results`
+  usersByProduct?: { asOf: string };
   // scripted "type an amount, save, watch the balance move" demo, rendered by CashmateDemo
   cashmateDemo?: boolean;
   // color palette + type scale that build themselves, rendered by Foundations
@@ -557,7 +557,6 @@ export const projects: Project[] = [
         ],
         // active users per product, taken from `summary.results`
         usersByProduct: {
-          totalLabel: "active users from our other products",
           asOf: "Data as of 6 November 2026",
         },
       },
@@ -567,7 +566,7 @@ export const projects: Project[] = [
     slug: "contract-payout",
     title: "How We Moved 30% of Payout Claims Online",
     category: "Mobile App · Insurance",
-    year: "2025",
+    year: "2026",
     description: "30% of monthly payout requests moved into the app within 3 months of launch.",
     tone: "#cfcaff",
     image: claimCover, // static fallback; the card shows the live status timeline instead
@@ -578,7 +577,7 @@ export const projects: Project[] = [
         { label: "Team", value: "Product Owner, Business Analyst, 2 Frontend developers, Backend developer" },
         { label: "Timeline", value: "1 sprint" },
         { label: "Platform", value: "Mobile app" },
-        { label: "Launch", value: "July 2025" },
+        { label: "Launch", value: "July 2026" },
         { label: "Result", value: "**30%** of monthly payout requests now come through the mobile app" },
       ],
     },
@@ -724,7 +723,7 @@ export const projects: Project[] = [
         blocks: [
           {
             heading: "Adoption",
-            text: "Within 3 months of the July 2025 launch, the app's share of **monthly** payout requests grew from **12%** to **30%**.",
+            text: "Within 3 months of the July 2026 launch, the app's share of **monthly** payout requests grew from **12%** to **30%**.",
           },
           {
             heading: "Marketing",
